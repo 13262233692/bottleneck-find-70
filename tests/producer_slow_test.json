@@ -1,0 +1,75 @@
+{
+  "data": [
+    {
+      "traceID": "trace-producer-slow-001",
+      "spans": [
+        {
+          "traceID": "trace-producer-slow-001",
+          "spanID": "span-001",
+          "operation": "process_user_event",
+          "startTime": 1000000,
+          "duration": 4500,
+          "references": [],
+          "processID": "p1",
+          "tags": []
+        },
+        {
+          "traceID": "trace-producer-slow-001",
+          "spanID": "span-002",
+          "operation": "slow_db_operation",
+          "startTime": 1000100,
+          "duration": 3800,
+          "references": [{"refType": "CHILD_OF", "traceID": "trace-producer-slow-001", "spanID": "span-001"}],
+          "processID": "p3",
+          "tags": []
+        },
+        {
+          "traceID": "trace-producer-slow-001",
+          "spanID": "span-003",
+          "operation": "send_to_kafka",
+          "startTime": 1004000,
+          "duration": 400,
+          "references": [{"refType": "CHILD_OF", "traceID": "trace-producer-slow-001", "spanID": "span-001"}],
+          "processID": "p1",
+          "tags": []
+        },
+        {
+          "traceID": "trace-producer-slow-001",
+          "spanID": "span-004",
+          "operation": "kafka_produce",
+          "startTime": 1004100,
+          "duration": 200,
+          "references": [{"refType": "CHILD_OF", "traceID": "trace-producer-slow-001", "spanID": "span-003"}],
+          "processID": "p2",
+          "tags": []
+        },
+        {
+          "traceID": "trace-producer-slow-001",
+          "spanID": "span-005",
+          "operation": "kafka_consume",
+          "startTime": 1004500,
+          "duration": 150,
+          "references": [{"refType": "FOLLOWS_FROM", "traceID": "trace-producer-slow-001", "spanID": "span-004"}],
+          "processID": "p2",
+          "tags": []
+        },
+        {
+          "traceID": "trace-producer-slow-001",
+          "spanID": "span-006",
+          "operation": "process_notification",
+          "startTime": 1004600,
+          "duration": 200,
+          "references": [{"refType": "CHILD_OF", "traceID": "trace-producer-slow-001", "spanID": "span-005"}],
+          "processID": "p4",
+          "tags": []
+        }
+      ],
+      "processes": {
+        "p1": {"serviceName": "slow-producer", "tags": []},
+        "p2": {"serviceName": "kafka", "tags": []},
+        "p3": {"serviceName": "mysql-db", "tags": []},
+        "p4": {"serviceName": "fast-consumer", "tags": []}
+      }
+    }
+  ]
+}

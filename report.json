@@ -1,0 +1,438 @@
+{
+  "total_traces": 5,
+  "total_services": 9,
+  "service_ranks": [
+    {
+      "service_name": "api-gateway",
+      "total_contribution": 14500,
+      "appearance_count": 5,
+      "avg_contribution": 2900.0,
+      "bottleneck_score": 0.800069247959958,
+      "critical_path_count": 5
+    },
+    {
+      "service_name": "mysql-db",
+      "total_contribution": 5500,
+      "appearance_count": 5,
+      "avg_contribution": 1375.0,
+      "bottleneck_score": 0.5617696112920585,
+      "critical_path_count": 4
+    },
+    {
+      "service_name": "order-service",
+      "total_contribution": 5800,
+      "appearance_count": 4,
+      "avg_contribution": 1933.3333333333333,
+      "bottleneck_score": 0.5262323928014435,
+      "critical_path_count": 3
+    },
+    {
+      "service_name": "inventory-service",
+      "total_contribution": 3900,
+      "appearance_count": 2,
+      "avg_contribution": 1950.0,
+      "bottleneck_score": 0.39894972926365585,
+      "critical_path_count": 2
+    },
+    {
+      "service_name": "search-service",
+      "total_contribution": 3800,
+      "appearance_count": 1,
+      "avg_contribution": 3800.0,
+      "bottleneck_score": 0.37150016710050376,
+      "critical_path_count": 1
+    },
+    {
+      "service_name": "elasticsearch",
+      "total_contribution": 3500,
+      "appearance_count": 1,
+      "avg_contribution": 3500.0,
+      "bottleneck_score": 0.350070881360887,
+      "critical_path_count": 1
+    },
+    {
+      "service_name": "user-service",
+      "total_contribution": 1500,
+      "appearance_count": 2,
+      "avg_contribution": 1500.0,
+      "bottleneck_score": 0.3500635218251811,
+      "critical_path_count": 1
+    },
+    {
+      "service_name": "notification-service",
+      "total_contribution": 0,
+      "appearance_count": 1,
+      "avg_contribution": 0.0,
+      "bottleneck_score": 0.0,
+      "critical_path_count": 0
+    },
+    {
+      "service_name": "redis-cache",
+      "total_contribution": 0,
+      "appearance_count": 3,
+      "avg_contribution": 0.0,
+      "bottleneck_score": 0.0,
+      "critical_path_count": 0
+    }
+  ],
+  "trace_analyses": [
+    {
+      "trace_id": "trace-0001",
+      "total_duration": 2500,
+      "services": [
+        "mysql-db",
+        "user-service",
+        "redis-cache",
+        "order-service",
+        "api-gateway"
+      ],
+      "critical_path": [
+        {
+          "service_name": "api-gateway",
+          "span_id": "span-0001",
+          "operation": "HTTP GET /api/orders",
+          "duration": 2500,
+          "start_time": 1000000,
+          "cumulative_duration": 2500,
+          "is_bottleneck": true
+        },
+        {
+          "service_name": "order-service",
+          "span_id": "span-0003",
+          "operation": "get_order_details",
+          "duration": 1800,
+          "start_time": 1000300,
+          "cumulative_duration": 2100,
+          "is_bottleneck": true
+        },
+        {
+          "service_name": "mysql-db",
+          "span_id": "span-0005",
+          "operation": "db_query_orders",
+          "duration": 1200,
+          "start_time": 1000550,
+          "cumulative_duration": 1750,
+          "is_bottleneck": true
+        }
+      ],
+      "bottleneck_scores": {
+        "mysql-db": 0.48,
+        "api-gateway": 1.0,
+        "order-service": 0.72
+      }
+    },
+    {
+      "trace_id": "trace-0002",
+      "total_duration": 3200,
+      "services": [
+        "inventory-service",
+        "notification-service",
+        "api-gateway",
+        "order-service",
+        "mysql-db"
+      ],
+      "critical_path": [
+        {
+          "service_name": "api-gateway",
+          "span_id": "span-0010",
+          "operation": "HTTP POST /api/orders",
+          "duration": 3200,
+          "start_time": 2000000,
+          "cumulative_duration": 3200,
+          "is_bottleneck": true
+        },
+        {
+          "service_name": "order-service",
+          "span_id": "span-0011",
+          "operation": "create_order",
+          "duration": 2800,
+          "start_time": 2000200,
+          "cumulative_duration": 3000,
+          "is_bottleneck": true
+        },
+        {
+          "service_name": "inventory-service",
+          "span_id": "span-0012",
+          "operation": "validate_inventory",
+          "duration": 1500,
+          "start_time": 2000300,
+          "cumulative_duration": 1800,
+          "is_bottleneck": true
+        },
+        {
+          "service_name": "mysql-db",
+          "span_id": "span-0013",
+          "operation": "db_inventory_check",
+          "duration": 1300,
+          "start_time": 2000400,
+          "cumulative_duration": 1700,
+          "is_bottleneck": true
+        }
+      ],
+      "bottleneck_scores": {
+        "order-service": 0.875,
+        "mysql-db": 0.40625,
+        "api-gateway": 1.0,
+        "inventory-service": 0.46875
+      }
+    },
+    {
+      "trace_id": "trace-0003",
+      "total_duration": 1800,
+      "services": [
+        "api-gateway",
+        "user-service",
+        "order-service",
+        "redis-cache",
+        "mysql-db"
+      ],
+      "critical_path": [
+        {
+          "service_name": "api-gateway",
+          "span_id": "span-0020",
+          "operation": "HTTP GET /api/users/123",
+          "duration": 1800,
+          "start_time": 3000000,
+          "cumulative_duration": 1800,
+          "is_bottleneck": true
+        },
+        {
+          "service_name": "user-service",
+          "span_id": "span-0021",
+          "operation": "get_user_profile",
+          "duration": 1500,
+          "start_time": 3000100,
+          "cumulative_duration": 1600,
+          "is_bottleneck": true
+        },
+        {
+          "service_name": "order-service",
+          "span_id": "span-0023",
+          "operation": "get_user_orders",
+          "duration": 1200,
+          "start_time": 3000300,
+          "cumulative_duration": 1500,
+          "is_bottleneck": true
+        },
+        {
+          "service_name": "mysql-db",
+          "span_id": "span-0024",
+          "operation": "db_query_user_orders",
+          "duration": 1000,
+          "start_time": 3000400,
+          "cumulative_duration": 1400,
+          "is_bottleneck": true
+        }
+      ],
+      "bottleneck_scores": {
+        "user-service": 0.8333333333333334,
+        "api-gateway": 1.0,
+        "mysql-db": 0.5555555555555556,
+        "order-service": 0.6666666666666666
+      }
+    },
+    {
+      "trace_id": "trace-0004",
+      "total_duration": 2800,
+      "services": [
+        "redis-cache",
+        "inventory-service",
+        "mysql-db",
+        "api-gateway"
+      ],
+      "critical_path": [
+        {
+          "service_name": "api-gateway",
+          "span_id": "span-0030",
+          "operation": "HTTP PUT /api/inventory",
+          "duration": 2800,
+          "start_time": 4000000,
+          "cumulative_duration": 2800,
+          "is_bottleneck": true
+        },
+        {
+          "service_name": "inventory-service",
+          "span_id": "span-0031",
+          "operation": "update_inventory",
+          "duration": 2400,
+          "start_time": 4000200,
+          "cumulative_duration": 2600,
+          "is_bottleneck": true
+        },
+        {
+          "service_name": "mysql-db",
+          "span_id": "span-0032",
+          "operation": "db_update_inventory",
+          "duration": 2000,
+          "start_time": 4000300,
+          "cumulative_duration": 2300,
+          "is_bottleneck": true
+        }
+      ],
+      "bottleneck_scores": {
+        "api-gateway": 1.0,
+        "mysql-db": 0.7142857142857143,
+        "inventory-service": 0.8571428571428571
+      }
+    },
+    {
+      "trace_id": "trace-0005",
+      "total_duration": 4200,
+      "services": [
+        "search-service",
+        "elasticsearch",
+        "mysql-db",
+        "api-gateway",
+        "order-service"
+      ],
+      "critical_path": [
+        {
+          "service_name": "api-gateway",
+          "span_id": "span-0040",
+          "operation": "HTTP GET /api/search",
+          "duration": 4200,
+          "start_time": 5000000,
+          "cumulative_duration": 4200,
+          "is_bottleneck": true
+        },
+        {
+          "service_name": "search-service",
+          "span_id": "span-0041",
+          "operation": "search_products",
+          "duration": 3800,
+          "start_time": 5000100,
+          "cumulative_duration": 3900,
+          "is_bottleneck": true
+        },
+        {
+          "service_name": "elasticsearch",
+          "span_id": "span-0042",
+          "operation": "es_query",
+          "duration": 3500,
+          "start_time": 5000200,
+          "cumulative_duration": 3700,
+          "is_bottleneck": true
+        }
+      ],
+      "bottleneck_scores": {
+        "elasticsearch": 0.8333333333333334,
+        "search-service": 0.9047619047619048,
+        "api-gateway": 1.0
+      }
+    }
+  ],
+  "dependency_graph": [
+    {
+      "from": "api-gateway",
+      "to": "order-service",
+      "call_count": 2,
+      "avg_duration": 2300.0,
+      "total_duration": 4600
+    },
+    {
+      "from": "order-service",
+      "to": "redis-cache",
+      "call_count": 1,
+      "avg_duration": 150.0,
+      "total_duration": 150
+    },
+    {
+      "from": "order-service",
+      "to": "mysql-db",
+      "call_count": 4,
+      "avg_duration": 1050.0,
+      "total_duration": 4200
+    },
+    {
+      "from": "order-service",
+      "to": "user-service",
+      "call_count": 1,
+      "avg_duration": 900.0,
+      "total_duration": 900
+    },
+    {
+      "from": "user-service",
+      "to": "mysql-db",
+      "call_count": 1,
+      "avg_duration": 700.0,
+      "total_duration": 700
+    },
+    {
+      "from": "order-service",
+      "to": "inventory-service",
+      "call_count": 1,
+      "avg_duration": 1500.0,
+      "total_duration": 1500
+    },
+    {
+      "from": "inventory-service",
+      "to": "mysql-db",
+      "call_count": 2,
+      "avg_duration": 1650.0,
+      "total_duration": 3300
+    },
+    {
+      "from": "order-service",
+      "to": "notification-service",
+      "call_count": 1,
+      "avg_duration": 600.0,
+      "total_duration": 600
+    },
+    {
+      "from": "api-gateway",
+      "to": "user-service",
+      "call_count": 1,
+      "avg_duration": 1500.0,
+      "total_duration": 1500
+    },
+    {
+      "from": "user-service",
+      "to": "redis-cache",
+      "call_count": 1,
+      "avg_duration": 800.0,
+      "total_duration": 800
+    },
+    {
+      "from": "user-service",
+      "to": "order-service",
+      "call_count": 1,
+      "avg_duration": 1200.0,
+      "total_duration": 1200
+    },
+    {
+      "from": "api-gateway",
+      "to": "inventory-service",
+      "call_count": 1,
+      "avg_duration": 2400.0,
+      "total_duration": 2400
+    },
+    {
+      "from": "inventory-service",
+      "to": "redis-cache",
+      "call_count": 1,
+      "avg_duration": 200.0,
+      "total_duration": 200
+    },
+    {
+      "from": "api-gateway",
+      "to": "search-service",
+      "call_count": 1,
+      "avg_duration": 3800.0,
+      "total_duration": 3800
+    },
+    {
+      "from": "search-service",
+      "to": "elasticsearch",
+      "call_count": 1,
+      "avg_duration": 3500.0,
+      "total_duration": 3500
+    },
+    {
+      "from": "search-service",
+      "to": "order-service",
+      "call_count": 1,
+      "avg_duration": 1200.0,
+      "total_duration": 1200
+    }
+  ]
+}

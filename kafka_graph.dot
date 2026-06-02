@@ -1,0 +1,38 @@
+digraph ServiceDependency {
+    graph [fontname="Arial", rankdir="LR", bgcolor="#ffffff"];
+    node [fontname="Arial", fontsize=12, shape="box", style="rounded,filled"];
+    edge [fontname="Arial", fontsize=10];
+
+    // 服务节点
+    "mysql-db" [label="mysql\ndb #1", fillcolor="#ff6b6b", fontcolor="#ffffff"];
+    "payment-service" [label="payment\nservice", fillcolor="#e8e8e8", fontcolor="#333333"];
+    "kafka" [label="kafka", fillcolor="#e8e8e8", fontcolor="#333333"];
+    "payment-gateway" [label="payment\ngateway", fillcolor="#e8e8e8", fontcolor="#333333"];
+    "inventory-service" [label="inventory\nservice #3", fillcolor="#ffd93d", fontcolor="#000000"];
+    "order-service" [label="order\nservice #2", fillcolor="#ffa502", fontcolor="#ffffff"];
+    "redis-cache" [label="redis\ncache", fillcolor="#e8e8e8", fontcolor="#333333"];
+    "notification-service" [label="notification\nservice", fillcolor="#e8e8e8", fontcolor="#333333"];
+
+    // 服务调用边
+    "order-service" -> "mysql-db" [label="1 calls\n2500.0μs avg", penwidth=3, color="#ff6b6b", fontcolor="#ff6b6b", style="solid"];
+    "order-service" -> "kafka" [label="1 calls\n200.0μs avg", penwidth=1, color="#666666", fontcolor="#666666", style="solid"];
+    "kafka" -> "notification-service" [label="2 calls\n250.0μs avg", penwidth=2, color="#ffa502", fontcolor="#ffa502", style="solid"];
+    "inventory-service" -> "mysql-db" [label="1 calls\n2000.0μs avg", penwidth=3, color="#ff6b6b", fontcolor="#ff6b6b", style="solid"];
+    "inventory-service" -> "kafka" [label="1 calls\n300.0μs avg", penwidth=2, color="#ffa502", fontcolor="#ffa502", style="solid"];
+    "kafka" -> "redis-cache" [label="1 calls\n150.0μs avg", penwidth=1, color="#666666", fontcolor="#666666", style="solid"];
+    "payment-service" -> "payment-gateway" [label="1 calls\n2800.0μs avg", penwidth=3, color="#ff6b6b", fontcolor="#ff6b6b", style="solid"];
+    "payment-service" -> "kafka" [label="1 calls\n400.0μs avg", penwidth=2, color="#ffa502", fontcolor="#ffa502", style="solid"];
+    "kafka" -> "order-service" [label="1 calls\n250.0μs avg", penwidth=2, color="#ffa502", fontcolor="#ffa502", style="solid"];
+
+    // 图例
+    subgraph cluster_legend {
+        label="图例";
+        style="dashed";
+        color="#999999";
+        rank=source;
+        "Top 1 Bottleneck" [shape=box, fillcolor="#ff6b6b", fontcolor="white", style="rounded,filled"];
+        "Top 2 Bottleneck" [shape=box, fillcolor="#ffa502", fontcolor="white", style="rounded,filled"];
+        "Top 3 Bottleneck" [shape=box, fillcolor="#ffd93d", fontcolor="black", style="rounded,filled"];
+        "Normal Service" [shape=box, fillcolor="#e8e8e8", fontcolor="#333333", style="rounded,filled"];
+    }
+}

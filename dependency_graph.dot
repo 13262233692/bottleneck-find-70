@@ -1,0 +1,46 @@
+digraph ServiceDependency {
+    graph [fontname="Arial", rankdir="LR", bgcolor="#ffffff"];
+    node [fontname="Arial", fontsize=12, shape="box", style="rounded,filled"];
+    edge [fontname="Arial", fontsize=10];
+
+    // 服务节点
+    "order-service" [label="order\nservice #3", fillcolor="#ffd93d", fontcolor="#000000"];
+    "inventory-service" [label="inventory\nservice", fillcolor="#e8e8e8", fontcolor="#333333"];
+    "search-service" [label="search\nservice", fillcolor="#e8e8e8", fontcolor="#333333"];
+    "api-gateway" [label="api\ngateway #1", fillcolor="#ff6b6b", fontcolor="#ffffff"];
+    "elasticsearch" [label="elasticsearch", fillcolor="#e8e8e8", fontcolor="#333333"];
+    "user-service" [label="user\nservice", fillcolor="#e8e8e8", fontcolor="#333333"];
+    "mysql-db" [label="mysql\ndb #2", fillcolor="#ffa502", fontcolor="#ffffff"];
+    "redis-cache" [label="redis\ncache", fillcolor="#e8e8e8", fontcolor="#333333"];
+    "notification-service" [label="notification\nservice", fillcolor="#e8e8e8", fontcolor="#333333"];
+
+    // 服务调用边
+    "api-gateway" -> "order-service" [label="2 calls\n2300.0μs avg", penwidth=3, color="#ff6b6b", fontcolor="#ff6b6b"];
+    "order-service" -> "redis-cache" [label="1 calls\n150.0μs avg", penwidth=1, color="#666666", fontcolor="#666666"];
+    "order-service" -> "mysql-db" [label="4 calls\n1050.0μs avg", penwidth=3, color="#ff6b6b", fontcolor="#ff6b6b"];
+    "order-service" -> "user-service" [label="1 calls\n900.0μs avg", penwidth=3, color="#ff6b6b", fontcolor="#ff6b6b"];
+    "user-service" -> "mysql-db" [label="1 calls\n700.0μs avg", penwidth=3, color="#ff6b6b", fontcolor="#ff6b6b"];
+    "order-service" -> "inventory-service" [label="1 calls\n1500.0μs avg", penwidth=3, color="#ff6b6b", fontcolor="#ff6b6b"];
+    "inventory-service" -> "mysql-db" [label="2 calls\n1650.0μs avg", penwidth=3, color="#ff6b6b", fontcolor="#ff6b6b"];
+    "order-service" -> "notification-service" [label="1 calls\n600.0μs avg", penwidth=3, color="#ff6b6b", fontcolor="#ff6b6b"];
+    "api-gateway" -> "user-service" [label="1 calls\n1500.0μs avg", penwidth=3, color="#ff6b6b", fontcolor="#ff6b6b"];
+    "user-service" -> "redis-cache" [label="1 calls\n800.0μs avg", penwidth=3, color="#ff6b6b", fontcolor="#ff6b6b"];
+    "user-service" -> "order-service" [label="1 calls\n1200.0μs avg", penwidth=3, color="#ff6b6b", fontcolor="#ff6b6b"];
+    "api-gateway" -> "inventory-service" [label="1 calls\n2400.0μs avg", penwidth=3, color="#ff6b6b", fontcolor="#ff6b6b"];
+    "inventory-service" -> "redis-cache" [label="1 calls\n200.0μs avg", penwidth=1, color="#666666", fontcolor="#666666"];
+    "api-gateway" -> "search-service" [label="1 calls\n3800.0μs avg", penwidth=3, color="#ff6b6b", fontcolor="#ff6b6b"];
+    "search-service" -> "elasticsearch" [label="1 calls\n3500.0μs avg", penwidth=3, color="#ff6b6b", fontcolor="#ff6b6b"];
+    "search-service" -> "order-service" [label="1 calls\n1200.0μs avg", penwidth=3, color="#ff6b6b", fontcolor="#ff6b6b"];
+
+    // 图例
+    subgraph cluster_legend {
+        label="图例";
+        style="dashed";
+        color="#999999";
+        rank=source;
+        "Top 1 Bottleneck" [shape=box, fillcolor="#ff6b6b", fontcolor="white", style="rounded,filled"];
+        "Top 2 Bottleneck" [shape=box, fillcolor="#ffa502", fontcolor="white", style="rounded,filled"];
+        "Top 3 Bottleneck" [shape=box, fillcolor="#ffd93d", fontcolor="black", style="rounded,filled"];
+        "Normal Service" [shape=box, fillcolor="#e8e8e8", fontcolor="#333333", style="rounded,filled"];
+    }
+}

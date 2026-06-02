@@ -1,0 +1,248 @@
+{
+  "data": [
+    {
+      "traceID": "trace-async-001",
+      "spans": [
+        {
+          "traceID": "trace-async-001",
+          "spanID": "span-001",
+          "operation": "create_order",
+          "startTime": 1000000,
+          "duration": 3500,
+          "references": [],
+          "processID": "p1",
+          "tags": []
+        },
+        {
+          "traceID": "trace-async-001",
+          "spanID": "span-002",
+          "operation": "validate_order",
+          "startTime": 1000100,
+          "duration": 500,
+          "references": [{"refType": "CHILD_OF", "traceID": "trace-async-001", "spanID": "span-001"}],
+          "processID": "p1",
+          "tags": []
+        },
+        {
+          "traceID": "trace-async-001",
+          "spanID": "span-003",
+          "operation": "slow_db_query",
+          "startTime": 1000200,
+          "duration": 2500,
+          "references": [{"refType": "CHILD_OF", "traceID": "trace-async-001", "spanID": "span-001"}],
+          "processID": "p3",
+          "tags": []
+        },
+        {
+          "traceID": "trace-async-001",
+          "spanID": "span-004",
+          "operation": "send_to_kafka",
+          "startTime": 1002800,
+          "duration": 600,
+          "references": [{"refType": "CHILD_OF", "traceID": "trace-async-001", "spanID": "span-001"}],
+          "processID": "p1",
+          "tags": []
+        },
+        {
+          "traceID": "trace-async-001",
+          "spanID": "span-005",
+          "operation": "kafka_produce",
+          "startTime": 1002900,
+          "duration": 200,
+          "references": [{"refType": "CHILD_OF", "traceID": "trace-async-001", "spanID": "span-004"}],
+          "processID": "p2",
+          "tags": []
+        },
+        {
+          "traceID": "trace-async-001",
+          "spanID": "span-006",
+          "operation": "kafka_consume",
+          "startTime": 1004000,
+          "duration": 150,
+          "references": [{"refType": "FOLLOWS_FROM", "traceID": "trace-async-001", "spanID": "span-005"}],
+          "processID": "p2",
+          "tags": []
+        },
+        {
+          "traceID": "trace-async-001",
+          "spanID": "span-007",
+          "operation": "send_notification",
+          "startTime": 1004100,
+          "duration": 200,
+          "references": [{"refType": "CHILD_OF", "traceID": "trace-async-001", "spanID": "span-006"}],
+          "processID": "p4",
+          "tags": []
+        }
+      ],
+      "processes": {
+        "p1": {"serviceName": "order-service", "tags": []},
+        "p2": {"serviceName": "kafka", "tags": []},
+        "p3": {"serviceName": "mysql-db", "tags": []},
+        "p4": {"serviceName": "notification-service", "tags": []}
+      }
+    },
+    {
+      "traceID": "trace-async-002",
+      "spans": [
+        {
+          "traceID": "trace-async-002",
+          "spanID": "span-010",
+          "operation": "update_inventory",
+          "startTime": 2000000,
+          "duration": 2800,
+          "references": [],
+          "processID": "p5",
+          "tags": []
+        },
+        {
+          "traceID": "trace-async-002",
+          "spanID": "span-011",
+          "operation": "check_stock",
+          "startTime": 2000100,
+          "duration": 2000,
+          "references": [{"refType": "CHILD_OF", "traceID": "trace-async-002", "spanID": "span-010"}],
+          "processID": "p3",
+          "tags": []
+        },
+        {
+          "traceID": "trace-async-002",
+          "spanID": "span-012",
+          "operation": "publish_event",
+          "startTime": 2002200,
+          "duration": 500,
+          "references": [{"refType": "CHILD_OF", "traceID": "trace-async-002", "spanID": "span-010"}],
+          "processID": "p5",
+          "tags": []
+        },
+        {
+          "traceID": "trace-async-002",
+          "spanID": "span-013",
+          "operation": "kafka_produce_event",
+          "startTime": 2002300,
+          "duration": 300,
+          "references": [{"refType": "CHILD_OF", "traceID": "trace-async-002", "spanID": "span-012"}],
+          "processID": "p2",
+          "tags": []
+        },
+        {
+          "traceID": "trace-async-002",
+          "spanID": "span-014",
+          "operation": "kafka_consume_event",
+          "startTime": 2003000,
+          "duration": 100,
+          "references": [{"refType": "FOLLOWS_FROM", "traceID": "trace-async-002", "spanID": "span-013"}],
+          "processID": "p2",
+          "tags": []
+        },
+        {
+          "traceID": "trace-async-002",
+          "spanID": "span-015",
+          "operation": "update_cache",
+          "startTime": 2003050,
+          "duration": 150,
+          "references": [{"refType": "CHILD_OF", "traceID": "trace-async-002", "spanID": "span-014"}],
+          "processID": "p6",
+          "tags": []
+        }
+      ],
+      "processes": {
+        "p2": {"serviceName": "kafka", "tags": []},
+        "p3": {"serviceName": "mysql-db", "tags": []},
+        "p5": {"serviceName": "inventory-service", "tags": []},
+        "p6": {"serviceName": "redis-cache", "tags": []}
+      }
+    },
+    {
+      "traceID": "trace-async-003",
+      "spans": [
+        {
+          "traceID": "trace-async-003",
+          "spanID": "span-020",
+          "operation": "process_payment",
+          "startTime": 3000000,
+          "duration": 4200,
+          "references": [],
+          "processID": "p7",
+          "tags": []
+        },
+        {
+          "traceID": "trace-async-003",
+          "spanID": "span-021",
+          "operation": "validate_payment",
+          "startTime": 3000100,
+          "duration": 3000,
+          "references": [{"refType": "CHILD_OF", "traceID": "trace-async-003", "spanID": "span-020"}],
+          "processID": "p7",
+          "tags": []
+        },
+        {
+          "traceID": "trace-async-003",
+          "spanID": "span-022",
+          "operation": "external_gateway_call",
+          "startTime": 3000200,
+          "duration": 2800,
+          "references": [{"refType": "CHILD_OF", "traceID": "trace-async-003", "spanID": "span-021"}],
+          "processID": "p8",
+          "tags": []
+        },
+        {
+          "traceID": "trace-async-003",
+          "spanID": "span-023",
+          "operation": "publish_payment_event",
+          "startTime": 3003200,
+          "duration": 800,
+          "references": [{"refType": "CHILD_OF", "traceID": "trace-async-003", "spanID": "span-020"}],
+          "processID": "p7",
+          "tags": []
+        },
+        {
+          "traceID": "trace-async-003",
+          "spanID": "span-024",
+          "operation": "kafka_produce_payment",
+          "startTime": 3003500,
+          "duration": 400,
+          "references": [{"refType": "CHILD_OF", "traceID": "trace-async-003", "spanID": "span-023"}],
+          "processID": "p2",
+          "tags": []
+        },
+        {
+          "traceID": "trace-async-003",
+          "spanID": "span-025",
+          "operation": "kafka_consume_payment",
+          "startTime": 3004500,
+          "duration": 200,
+          "references": [{"refType": "FOLLOWS_FROM", "traceID": "trace-async-003", "spanID": "span-024"}],
+          "processID": "p2",
+          "tags": []
+        },
+        {
+          "traceID": "trace-async-003",
+          "spanID": "span-026",
+          "operation": "send_receipt_email",
+          "startTime": 3004600,
+          "duration": 300,
+          "references": [{"refType": "CHILD_OF", "traceID": "trace-async-003", "spanID": "span-025"}],
+          "processID": "p4",
+          "tags": []
+        },
+        {
+          "traceID": "trace-async-003",
+          "spanID": "span-027",
+          "operation": "update_order_status",
+          "startTime": 3004650,
+          "duration": 250,
+          "references": [{"refType": "CHILD_OF", "traceID": "trace-async-003", "spanID": "span-025"}],
+          "processID": "p1",
+          "tags": []
+        }
+      ],
+      "processes": {
+        "p1": {"serviceName": "order-service", "tags": []},
+        "p2": {"serviceName": "kafka", "tags": []},
+        "p4": {"serviceName": "notification-service", "tags": []},
+        "p7": {"serviceName": "payment-service", "tags": []},
+        "p8": {"serviceName": "payment-gateway", "tags": []}
+      }
+    }
+  ]
+}

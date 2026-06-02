@@ -1,0 +1,336 @@
+{
+  "data": [
+    {
+      "traceID": "trace-0001",
+      "spans": [
+        {
+          "traceID": "trace-0001",
+          "spanID": "span-0001",
+          "operation": "HTTP GET /api/orders",
+          "startTime": 1000000,
+          "duration": 2500,
+          "references": [],
+          "processID": "p1",
+          "tags": [
+            {"key": "http.method", "type": "string", "value": "GET"},
+            {"key": "http.url", "type": "string", "value": "/api/orders"}
+          ]
+        },
+        {
+          "traceID": "trace-0001",
+          "spanID": "span-0002",
+          "operation": "validate_request",
+          "startTime": 1000100,
+          "duration": 200,
+          "references": [{"refType": "CHILD_OF", "traceID": "trace-0001", "spanID": "span-0001"}],
+          "processID": "p1",
+          "tags": []
+        },
+        {
+          "traceID": "trace-0001",
+          "spanID": "span-0003",
+          "operation": "get_order_details",
+          "startTime": 1000300,
+          "duration": 1800,
+          "references": [{"refType": "CHILD_OF", "traceID": "trace-0001", "spanID": "span-0001"}],
+          "processID": "p2",
+          "tags": [{"key": "db.statement", "type": "string", "value": "SELECT * FROM orders"}]
+        },
+        {
+          "traceID": "trace-0001",
+          "spanID": "span-0004",
+          "operation": "cache_lookup",
+          "startTime": 1000350,
+          "duration": 150,
+          "references": [{"refType": "CHILD_OF", "traceID": "trace-0001", "spanID": "span-0003"}],
+          "processID": "p4",
+          "tags": [{"key": "cache.hit", "type": "bool", "value": false}]
+        },
+        {
+          "traceID": "trace-0001",
+          "spanID": "span-0005",
+          "operation": "db_query_orders",
+          "startTime": 1000550,
+          "duration": 1200,
+          "references": [{"refType": "CHILD_OF", "traceID": "trace-0001", "spanID": "span-0003"}],
+          "processID": "p3",
+          "tags": [{"key": "db.rows", "type": "int64", "value": 50}]
+        },
+        {
+          "traceID": "trace-0001",
+          "spanID": "span-0006",
+          "operation": "get_user_info",
+          "startTime": 1000600,
+          "duration": 900,
+          "references": [{"refType": "CHILD_OF", "traceID": "trace-0001", "spanID": "span-0003"}],
+          "processID": "p5",
+          "tags": []
+        },
+        {
+          "traceID": "trace-0001",
+          "spanID": "span-0007",
+          "operation": "db_query_users",
+          "startTime": 1000700,
+          "duration": 700,
+          "references": [{"refType": "CHILD_OF", "traceID": "trace-0001", "spanID": "span-0006"}],
+          "processID": "p3",
+          "tags": []
+        }
+      ],
+      "processes": {
+        "p1": {"serviceName": "api-gateway", "tags": [{"key": "ip", "type": "string", "value": "10.0.0.1"}]},
+        "p2": {"serviceName": "order-service", "tags": [{"key": "version", "type": "string", "value": "v2.1.0"}]},
+        "p3": {"serviceName": "mysql-db", "tags": [{"key": "role", "type": "string", "value": "primary"}]},
+        "p4": {"serviceName": "redis-cache", "tags": [{"key": "cluster", "type": "string", "value": "cache-prod"}]},
+        "p5": {"serviceName": "user-service", "tags": [{"key": "version", "type": "string", "value": "v1.5.2"}]}
+      }
+    },
+    {
+      "traceID": "trace-0002",
+      "spans": [
+        {
+          "traceID": "trace-0002",
+          "spanID": "span-0010",
+          "operation": "HTTP POST /api/orders",
+          "startTime": 2000000,
+          "duration": 3200,
+          "references": [],
+          "processID": "p1",
+          "tags": [{"key": "http.method", "type": "string", "value": "POST"}]
+        },
+        {
+          "traceID": "trace-0002",
+          "spanID": "span-0011",
+          "operation": "create_order",
+          "startTime": 2000200,
+          "duration": 2800,
+          "references": [{"refType": "CHILD_OF", "traceID": "trace-0002", "spanID": "span-0010"}],
+          "processID": "p2",
+          "tags": []
+        },
+        {
+          "traceID": "trace-0002",
+          "spanID": "span-0012",
+          "operation": "validate_inventory",
+          "startTime": 2000300,
+          "duration": 1500,
+          "references": [{"refType": "CHILD_OF", "traceID": "trace-0002", "spanID": "span-0011"}],
+          "processID": "p6",
+          "tags": []
+        },
+        {
+          "traceID": "trace-0002",
+          "spanID": "span-0013",
+          "operation": "db_inventory_check",
+          "startTime": 2000400,
+          "duration": 1300,
+          "references": [{"refType": "CHILD_OF", "traceID": "trace-0002", "spanID": "span-0012"}],
+          "processID": "p3",
+          "tags": []
+        },
+        {
+          "traceID": "trace-0002",
+          "spanID": "span-0014",
+          "operation": "db_insert_order",
+          "startTime": 2001800,
+          "duration": 1100,
+          "references": [{"refType": "CHILD_OF", "traceID": "trace-0002", "spanID": "span-0011"}],
+          "processID": "p3",
+          "tags": []
+        },
+        {
+          "traceID": "trace-0002",
+          "spanID": "span-0015",
+          "operation": "send_notification",
+          "startTime": 2002000,
+          "duration": 600,
+          "references": [{"refType": "CHILD_OF", "traceID": "trace-0002", "spanID": "span-0011"}],
+          "processID": "p7",
+          "tags": []
+        }
+      ],
+      "processes": {
+        "p1": {"serviceName": "api-gateway", "tags": []},
+        "p2": {"serviceName": "order-service", "tags": []},
+        "p3": {"serviceName": "mysql-db", "tags": []},
+        "p6": {"serviceName": "inventory-service", "tags": []},
+        "p7": {"serviceName": "notification-service", "tags": []}
+      }
+    },
+    {
+      "traceID": "trace-0003",
+      "spans": [
+        {
+          "traceID": "trace-0003",
+          "spanID": "span-0020",
+          "operation": "HTTP GET /api/users/123",
+          "startTime": 3000000,
+          "duration": 1800,
+          "references": [],
+          "processID": "p1",
+          "tags": []
+        },
+        {
+          "traceID": "trace-0003",
+          "spanID": "span-0021",
+          "operation": "get_user_profile",
+          "startTime": 3000100,
+          "duration": 1500,
+          "references": [{"refType": "CHILD_OF", "traceID": "trace-0003", "spanID": "span-0020"}],
+          "processID": "p5",
+          "tags": []
+        },
+        {
+          "traceID": "trace-0003",
+          "spanID": "span-0022",
+          "operation": "cache_get_user",
+          "startTime": 3000150,
+          "duration": 800,
+          "references": [{"refType": "CHILD_OF", "traceID": "trace-0003", "spanID": "span-0021"}],
+          "processID": "p4",
+          "tags": [{"key": "cache.hit", "type": "bool", "value": true}]
+        },
+        {
+          "traceID": "trace-0003",
+          "spanID": "span-0023",
+          "operation": "get_user_orders",
+          "startTime": 3000300,
+          "duration": 1200,
+          "references": [{"refType": "CHILD_OF", "traceID": "trace-0003", "spanID": "span-0021"}],
+          "processID": "p2",
+          "tags": []
+        },
+        {
+          "traceID": "trace-0003",
+          "spanID": "span-0024",
+          "operation": "db_query_user_orders",
+          "startTime": 3000400,
+          "duration": 1000,
+          "references": [{"refType": "CHILD_OF", "traceID": "trace-0003", "spanID": "span-0023"}],
+          "processID": "p3",
+          "tags": []
+        }
+      ],
+      "processes": {
+        "p1": {"serviceName": "api-gateway", "tags": []},
+        "p2": {"serviceName": "order-service", "tags": []},
+        "p3": {"serviceName": "mysql-db", "tags": []},
+        "p4": {"serviceName": "redis-cache", "tags": []},
+        "p5": {"serviceName": "user-service", "tags": []}
+      }
+    },
+    {
+      "traceID": "trace-0004",
+      "spans": [
+        {
+          "traceID": "trace-0004",
+          "spanID": "span-0030",
+          "operation": "HTTP PUT /api/inventory",
+          "startTime": 4000000,
+          "duration": 2800,
+          "references": [],
+          "processID": "p1",
+          "tags": []
+        },
+        {
+          "traceID": "trace-0004",
+          "spanID": "span-0031",
+          "operation": "update_inventory",
+          "startTime": 4000200,
+          "duration": 2400,
+          "references": [{"refType": "CHILD_OF", "traceID": "trace-0004", "spanID": "span-0030"}],
+          "processID": "p6",
+          "tags": []
+        },
+        {
+          "traceID": "trace-0004",
+          "spanID": "span-0032",
+          "operation": "db_update_inventory",
+          "startTime": 4000300,
+          "duration": 2000,
+          "references": [{"refType": "CHILD_OF", "traceID": "trace-0004", "spanID": "span-0031"}],
+          "processID": "p3",
+          "tags": []
+        },
+        {
+          "traceID": "trace-0004",
+          "spanID": "span-0033",
+          "operation": "cache_invalidate",
+          "startTime": 4002300,
+          "duration": 200,
+          "references": [{"refType": "CHILD_OF", "traceID": "trace-0004", "spanID": "span-0031"}],
+          "processID": "p4",
+          "tags": []
+        }
+      ],
+      "processes": {
+        "p1": {"serviceName": "api-gateway", "tags": []},
+        "p3": {"serviceName": "mysql-db", "tags": []},
+        "p4": {"serviceName": "redis-cache", "tags": []},
+        "p6": {"serviceName": "inventory-service", "tags": []}
+      }
+    },
+    {
+      "traceID": "trace-0005",
+      "spans": [
+        {
+          "traceID": "trace-0005",
+          "spanID": "span-0040",
+          "operation": "HTTP GET /api/search",
+          "startTime": 5000000,
+          "duration": 4200,
+          "references": [],
+          "processID": "p1",
+          "tags": []
+        },
+        {
+          "traceID": "trace-0005",
+          "spanID": "span-0041",
+          "operation": "search_products",
+          "startTime": 5000100,
+          "duration": 3800,
+          "references": [{"refType": "CHILD_OF", "traceID": "trace-0005", "spanID": "span-0040"}],
+          "processID": "p8",
+          "tags": []
+        },
+        {
+          "traceID": "trace-0005",
+          "spanID": "span-0042",
+          "operation": "es_query",
+          "startTime": 5000200,
+          "duration": 3500,
+          "references": [{"refType": "CHILD_OF", "traceID": "trace-0005", "spanID": "span-0041"}],
+          "processID": "p9",
+          "tags": [{"key": "es.index", "type": "string", "value": "products"}]
+        },
+        {
+          "traceID": "trace-0005",
+          "spanID": "span-0043",
+          "operation": "get_product_details",
+          "startTime": 5000500,
+          "duration": 1200,
+          "references": [{"refType": "CHILD_OF", "traceID": "trace-0005", "spanID": "span-0041"}],
+          "processID": "p2",
+          "tags": []
+        },
+        {
+          "traceID": "trace-0005",
+          "spanID": "span-0044",
+          "operation": "db_query_products",
+          "startTime": 5000600,
+          "duration": 900,
+          "references": [{"refType": "CHILD_OF", "traceID": "trace-0005", "spanID": "span-0043"}],
+          "processID": "p3",
+          "tags": []
+        }
+      ],
+      "processes": {
+        "p1": {"serviceName": "api-gateway", "tags": []},
+        "p2": {"serviceName": "order-service", "tags": []},
+        "p3": {"serviceName": "mysql-db", "tags": []},
+        "p8": {"serviceName": "search-service", "tags": []},
+        "p9": {"serviceName": "elasticsearch", "tags": []}
+      }
+    }
+  ]
+}
